@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { data } from "./data.js";
 
-function App() {
+const App = () => {
+  const [currentDetails, setCurrentDetails] = useState(data[0]);
+  const tabHandler = (id) => {
+    const newId = id;
+    setCurrentDetails(data[newId]);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section>
+      <div className="tabs_container">
+        <ul className="tabs">
+          {data.map((item) => {
+            return (
+              <button key={item.id} onClick={() => tabHandler(item.id)}>
+                {currentDetails.id === item.id ? (
+                  <li className="active_tab">{item.name.toUpperCase()}</li>
+                ) : (
+                  <li>{item.name.toUpperCase()}</li>
+                )}
+              </button>
+            );
+          })}
+        </ul>
+      </div>
+      <Details item={currentDetails} />
+    </section>
   );
-}
+};
+
+const Details = (props) => {
+  const { name, designation, period, discription } = props.item;
+  return (
+    <article>
+      <h1>{designation}</h1>
+      <h2>{name.toUpperCase()}</h2>
+      <h3>
+        {period.start} - {period.end}
+      </h3>
+      <ul className="discription">
+        {discription.map((item) => {
+          return <li key={Math.random()}>{item}</li>;
+        })}
+      </ul>
+    </article>
+  );
+};
 
 export default App;
